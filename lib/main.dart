@@ -14,17 +14,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: isDarkMode ? ThemeData.dark() : ThemeData.light(),
-      home: FadingTextAnimation(
-        isDarkMode: isDarkMode,
-        toggleDarkMode: () {
-          setState(() {
-            isDarkMode = !isDarkMode;
-          });
-        },
-      ),
-    );
+    return MaterialApp(home: FadingTextAnimation());
   }
 }
 
@@ -114,36 +104,54 @@ class _FadingTextAnimationState extends State<FadingTextAnimation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text('Fading Text Animation')),
+      body: Center(
+        child: GestureDetector(
+          //clicking text changes opacity too
+          onTap: toggleVisibility,
+          child: AnimatedOpacity(
+            opacity: _isVisible ? 1.0 : 0.0,
+            duration: Duration(seconds: 1), //changed duration
+            curve: Curves.easeInOut, //added curve
+            child: Text(
+              'This will disappear!', //changed text
+              style: TextStyle(
+                fontSize: 24,
+                color: textColor, // use the selected color
+              ),
+            ),
+          ),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: toggleVisibility,
+        child: Icon(Icons.play_arrow),
+      ),
+    );
+  }
+}
+
+class SecondFadingAnimation extends StatefulWidget {
+  const SecondFadingAnimation({super.key});
+
+  @override
+  State<SecondFadingAnimation> createState() => _SecondFadingAnimationState();
+}
+
+class _SecondFadingAnimationState extends State<SecondFadingAnimation> {
+  bool _isVisible = true;
+  void toggleVisibility() {
+    setState(() {
+      _isVisible = !_isVisible;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
       appBar: AppBar(
         title: Text('Fading Text Animation'),
-        actions: [
-          // color picker button
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: IconButton(
-              icon: Icon(Icons.color_lens, size: 30),
-              onPressed: _showColorPicker,
-              tooltip: 'Change text color',
-              iconSize: 36,
-            ),
-          ),
-          // dark mode toggle
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: IconButton(
-              icon: Icon(
-                widget.isDarkMode ? Icons.wb_sunny : Icons.nightlight_round,
-                size: 30,
-              ),
-              onPressed: () {
-                widget.toggleDarkMode();
-              },
-              tooltip: widget.isDarkMode ? 'Light Mode' : 'Dark Mode',
-              iconSize: 36,
-            ),
-          ),
-          SizedBox(width: 10),
-        ],
+        backgroundColor: Colors.green,
       ),
       body: Center(
         child: GestureDetector(
@@ -153,12 +161,9 @@ class _FadingTextAnimationState extends State<FadingTextAnimation> {
             opacity: _isVisible ? 1.0 : 0.0,
             duration: Duration(seconds: 2), //changed duration
             curve: Curves.easeInOut, //added curve
-            child: Text(
-              'This will disappear!', //changed text
-              style: TextStyle(
-                fontSize: 24,
-                color: textColor, // use the selected color
-              ),
+            child: const Text(
+              'Will I disappear too?', //changed text
+              style: TextStyle(fontSize: 24),
             ),
           ),
         ),
