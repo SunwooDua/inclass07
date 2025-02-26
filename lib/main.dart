@@ -48,7 +48,10 @@ class _FadingTextAnimationState extends State<FadingTextAnimation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Fading Text Animation')),
+      appBar: AppBar(
+        title: Text('Fading Text Animation'),
+        backgroundColor: Colors.blue,
+      ),
       body: Center(
         child: GestureDetector(
           //clicking text changes opacity too
@@ -90,7 +93,10 @@ class _SecondFadingAnimationState extends State<SecondFadingAnimation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Fading Text Animation')),
+      appBar: AppBar(
+        title: Text('Fading Text Animation'),
+        backgroundColor: Colors.green,
+      ),
       body: Center(
         child: GestureDetector(
           //clicking text changes opacity too
