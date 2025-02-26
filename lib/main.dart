@@ -4,107 +4,54 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   @override
-  _MyAppState createState() => _MyAppState();
+  Widget build(BuildContext context) {
+    return MaterialApp(home: swipeScreen());
+  }
 }
 
-class _MyAppState extends State<MyApp> {
-  bool isDarkMode = false;
+class swipeScreen extends StatefulWidget {
+  const swipeScreen({super.key});
+
+  @override
+  State<swipeScreen> createState() => _swipeScreenState();
+}
+
+class _swipeScreenState extends State<swipeScreen> {
+  final controller = PageController(initialPage: 1);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: FadingTextAnimation());
+    return Scaffold(
+      body: PageView(
+        controller: controller,
+        children: [FadingTextAnimation(), SecondFadingAnimation()],
+      ),
+    );
   }
 }
 
 class FadingTextAnimation extends StatefulWidget {
-  final bool isDarkMode;
-  final Function toggleDarkMode;
-
-  FadingTextAnimation({required this.isDarkMode, required this.toggleDarkMode});
-
   @override
   _FadingTextAnimationState createState() => _FadingTextAnimationState();
 }
 
 class _FadingTextAnimationState extends State<FadingTextAnimation> {
   bool _isVisible = true;
-  Color textColor = Colors.black;
-
   void toggleVisibility() {
     setState(() {
       _isVisible = !_isVisible;
     });
   }
 
-  // show simple color picker
-  void _showColorPicker() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text('Pick a color', style: TextStyle(fontSize: 22)),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  _colorOption(Colors.red),
-                  _colorOption(Colors.blue),
-                  _colorOption(Colors.green),
-                ],
-              ),
-              SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  _colorOption(Colors.yellow),
-                  _colorOption(Colors.purple),
-                  _colorOption(Colors.orange),
-                ],
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Cancel', style: TextStyle(fontSize: 18)),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  // helper for color selection
-  Widget _colorOption(Color color) {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          textColor = color;
-        });
-        Navigator.of(context).pop();
-      },
-      child: Container(
-        width: 60,
-        height: 60,
-        decoration: BoxDecoration(
-          color: color,
-          shape: BoxShape.circle,
-          border: Border.all(color: Colors.grey, width: 2), // Added border
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Fading Text Animation')),
+      appBar: AppBar(
+        title: Text('Fading Text Animation'),
+        backgroundColor: Colors.blue,
+      ),
       body: Center(
         child: GestureDetector(
           //clicking text changes opacity too
@@ -113,12 +60,9 @@ class _FadingTextAnimationState extends State<FadingTextAnimation> {
             opacity: _isVisible ? 1.0 : 0.0,
             duration: Duration(seconds: 1), //changed duration
             curve: Curves.easeInOut, //added curve
-            child: Text(
+            child: const Text(
               'This will disappear!', //changed text
-              style: TextStyle(
-                fontSize: 24,
-                color: textColor, // use the selected color
-              ),
+              style: TextStyle(fontSize: 24),
             ),
           ),
         ),
