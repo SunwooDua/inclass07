@@ -16,7 +16,10 @@ class FadingTextAnimation extends StatefulWidget {
   _FadingTextAnimationState createState() => _FadingTextAnimationState();
 }
 
+final controller = PageController(initialPage: 1);
+
 class _FadingTextAnimationState extends State<FadingTextAnimation> {
+  final pageView = PageView(controller: controller, children: []);
   bool _isVisible = true;
   void toggleVisibility() {
     setState(() {
